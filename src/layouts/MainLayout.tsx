@@ -83,7 +83,7 @@ const MainLayout = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page}>
+                <MenuItem key={page} onClick={() => navigate(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
