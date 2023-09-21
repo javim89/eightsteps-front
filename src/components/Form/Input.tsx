@@ -11,11 +11,12 @@ const Input: React.FC<InputI> = ({ name, ...rest }) => {
   const { register, formState: { errors } } = methods;
 
   const errorMesage = get(errors, `${name}.message`);
+
   return (
     <TextField
     variant="outlined"
     error={!!errorMesage}
-    helperText={!!errorMesage}
+    helperText={errorMesage?.toString()}
     {...register(name)}
     {...rest} />
   );

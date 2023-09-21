@@ -1,19 +1,8 @@
 import { Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useSuspenseQuery, gql, TypedDocumentNode } from "@apollo/client";
+import { useSuspenseQuery } from "@apollo/client";
 import RoomCard from "../../components/Room/RoomCard.tsx";
-
-interface Data {
-  getAllRooms: Room[];
-}
-
-const GET_ROOMS: TypedDocumentNode<Data> = gql`
-  query GetAllRooms {
-    getAllRooms {
-      id
-    }
-  }
-`;
+import { GET_ROOMS } from "../../querys/querys.tsx";
 
 const RoomsSection = () => {
   const navigate = useNavigate();

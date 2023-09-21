@@ -1,14 +1,6 @@
 import { useParams } from "react-router-dom";
-import { gql, useQuery } from "@apollo/client";
-
-const GET_ROOM_BY_ID = gql`
-  query GetRoomById($id: ID) {
-    getRoomById(id: $id) {
-      id
-      isPrivate
-    }
-  }
-`;
+import { useQuery } from "@apollo/client";
+import { GET_ROOM_BY_ID } from "../querys/querys.tsx";
 
 const Room = () => {
   const { id } = useParams();
@@ -20,7 +12,7 @@ const Room = () => {
   if (error) return <p>Error : {error.message}</p>;
 
   return (
-    <div>{data.getRoomById.id}</div>
+    <div>{data.getRoomById.name}</div>
   );
 };
 
