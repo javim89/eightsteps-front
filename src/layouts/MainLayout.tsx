@@ -40,7 +40,7 @@ const MainLayout = () => {
 
   return (
     <React.Fragment>
-      <AppBar position="static">
+      <AppBar position="static" id="appBar">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -161,9 +161,7 @@ const MainLayout = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Container maxWidth="xl" sx={{
-        py: 2,
-      }}>
+      <Container maxWidth="xl">
         <Outlet />
       </Container>
     </React.Fragment>

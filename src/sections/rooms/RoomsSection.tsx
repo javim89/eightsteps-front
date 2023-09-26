@@ -16,7 +16,7 @@ const RoomsSection = () => {
         <Grid item key={room.id}>
           <RoomCard
             name={room.name}
-            participants={room.participants?.length}
+            participants={room.participants}
             onClickJoin={() => navigate(room.id)} />
         </Grid>
       ))}

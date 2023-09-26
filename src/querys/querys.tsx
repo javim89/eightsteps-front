@@ -1,30 +1,31 @@
 import { gql, TypedDocumentNode } from "@apollo/client";
 
-interface Data {
-  getAllRooms: Room[];
-}
-
-const GET_ROOMS: TypedDocumentNode<Data> = gql`
+const GET_ROOMS: TypedDocumentNode<GetAllRoomsData> = gql`
   query GetAllRooms {
     getAllRooms {
       id
       name
-      participants {
-        id
-      }
+      participants
     }
   }
 `;
 
-const GET_ROOM_BY_ID = gql`
+const GET_ROOM_BY_ID: TypedDocumentNode<GetRoomByIdData> = gql`
   query GetRoomById($id: ID) {
     getRoomById(id: $id) {
       id
       isPrivate
       name
-      participants {
-        name
-        surname
+      steps {
+        category {
+          mainColor
+          name
+        }
+        step
+        participants {
+          name
+          surname
+        }
       }
     }
   }

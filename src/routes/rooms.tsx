@@ -39,7 +39,9 @@ const Rooms = () => {
   }, [data, navigate]);
 
   return (
-    <Box>
+    <Box sx={{
+      mt: 2,
+    }}>
       <DialogFormSection
         open={openFormDialog}
         onClose={() => setOpenFormDialog(false)}
