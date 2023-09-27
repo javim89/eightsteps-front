@@ -4,6 +4,14 @@ import {
 } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 
+const getShortName = (participant: User): String => {
+  let shortName = (participant.alias && participant.alias[0]) || "";
+  if (participant.name && participant.surname) {
+    shortName = `${participant.name[0]} ${participant.surname[0]}`;
+  }
+  return shortName;
+};
+
 const Step: React.FC<Step> = ({
   category,
   participants,
@@ -32,7 +40,7 @@ const Step: React.FC<Step> = ({
         <Stack direction="row" spacing={2}>
           {participants.map((participant) => (
             <Avatar sx={{ bgcolor: deepPurple[500], width: 24, height: 24 }}>
-              <Typography fontSize={14}>{`${participant.name[0]} ${participant.surname[0]}`}</Typography>
+              <Typography fontSize={14}>{getShortName(participant)}</Typography>
             </Avatar>
           ))}
         </Stack>

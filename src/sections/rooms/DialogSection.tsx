@@ -13,8 +13,6 @@ import { TransitionProps } from "@mui/material/transitions";
 import LoadingButton from "@mui/lab/LoadingButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Form from "../../components/Form/Form.tsx";
-import Input from "../../components/Form/Input.tsx";
-import roomValidationSchema from "../../validation-schemas/room.tsx";
 
 const Transition = forwardRef((
   props: TransitionProps & {
@@ -23,12 +21,12 @@ const Transition = forwardRef((
   ref: React.Ref<unknown>,
 ) => <Slide direction="up" ref={ref} {...props} />);
 
-const DialogFormSection = ({
-  open, onClose, onSubmit, loading,
+const DialogSection = ({
+  open, onClose, state, loading,
 }: {
   open: boolean,
   onClose: () => void
-  onSubmit: (values: FormData) => void
+  state: RoomsStateI
   loading: boolean
 }) => {
   const theme = useTheme();
@@ -37,28 +35,23 @@ const DialogFormSection = ({
   return (
     <Dialog open={open} onClose={onClose} fullScreen={matches} TransitionComponent={Transition}>
       <Form
-        onSubmit={onSubmit}
-        validationSchema={roomValidationSchema}
+        onSubmit={state.onSubmit}
+        validationSchema={state.validationSchema}
       >
-        <DialogTitle>Crear sala</DialogTitle>
+        <DialogTitle>{state.title}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Crea una sala para competir con otros o con tus amigos.
+            {state.contentText}
           </DialogContentText>
-          <Input
-            autoFocus
-            name="name"
-            label="Nombre"
-            fullWidth
-          />
+          {state.bodyForm}
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Cancel</Button>
-          <LoadingButton type="submit" loading={loading} variant="contained">Crear</LoadingButton>
+          <LoadingButton type="submit" loading={loading} variant="contained">{state.loadingButtonText}</LoadingButton>
         </DialogActions>
       </Form>
     </Dialog>
   );
 };
 
-export default DialogFormSection;
+export default DialogSection;

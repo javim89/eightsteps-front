@@ -22,7 +22,7 @@ declare global {
     category: Category;
   }
   interface Room {
-    id: number;
+    id: string;
     isPrivate: boolean;
     name: string;
     password: string;
@@ -36,6 +36,16 @@ declare global {
 
   interface GetRoomByIdData {
     getRoomById: Room;
+  }
+
+  interface RoomsStateI {
+    openDialog: boolean;
+    title?: string;
+    contentText?: string;
+    validationSchema: any;
+    onSubmit: any;
+    bodyForm: any;
+    loadingButtonText?: string;
   }
 
 }

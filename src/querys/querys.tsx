@@ -16,6 +16,7 @@ const GET_ROOM_BY_ID: TypedDocumentNode<GetRoomByIdData> = gql`
       id
       isPrivate
       name
+      participants
       steps {
         category {
           mainColor
@@ -25,6 +26,7 @@ const GET_ROOM_BY_ID: TypedDocumentNode<GetRoomByIdData> = gql`
         participants {
           name
           surname
+          alias
         }
       }
     }

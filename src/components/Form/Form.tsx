@@ -7,6 +7,7 @@ interface FormI {
   onSubmit: any;
   validationSchema?: any;
   defaultValues?: any;
+  ref?: any;
 }
 const Form: React.FC<FormI> = ({
   validationSchema,
