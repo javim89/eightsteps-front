@@ -36,6 +36,7 @@ declare global {
 
   interface GetRoomByIdData {
     getRoomById: Room;
+    roomSubscription?: Room
   }
 
   interface RoomsStateI {

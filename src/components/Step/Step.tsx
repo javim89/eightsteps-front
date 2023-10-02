@@ -38,8 +38,8 @@ const Step: React.FC<Step> = ({
       </Box>
       <Box>
         <Stack direction="row" spacing={2}>
-          {participants.map((participant) => (
-            <Avatar sx={{ bgcolor: deepPurple[500], width: 24, height: 24 }}>
+          {participants.map((participant, index) => (
+            <Avatar key={index} sx={{ bgcolor: deepPurple[500], width: 24, height: 24 }}>
               <Typography fontSize={14}>{getShortName(participant)}</Typography>
             </Avatar>
           ))}

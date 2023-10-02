@@ -61,7 +61,6 @@ const Rooms = () => {
   };
 
   const onCreateParticipant = async (values: FormData) => {
-    console.log(selectedRoomId);
     await addParticipantToRoom({
       variables: {
         roomId: selectedRoomId,
