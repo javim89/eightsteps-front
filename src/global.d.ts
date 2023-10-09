@@ -5,6 +5,12 @@ declare global {
    * Now declare things that go in the global namespace,
    * or augment existing declarations in the global namespace.
    */
+
+  enum RoomStatusEnum {
+    NEW = "NEW",
+    PLAYING = "PLAYING",
+    FINISHED = "FINISHED",
+  }
   interface User {
     name: string;
     surname: string;
@@ -16,18 +22,34 @@ declare global {
     mainColor: string;
   }
 
+  interface Question {
+    id: string,
+    question: string,
+    helperText: string
+  }
+  interface ParticipantWithAnswer {
+    user: User,
+    answerOne: Boolean,
+    isAnswerOneCorrect: Boolean,
+    answerTwo: any
+  }
   interface Step {
-    participants: User[];
+    participants: ParticipantWithAnswer[];
     step: number;
     category: Category;
+    question: Question;
   }
+
   interface Room {
     id: string;
     isPrivate: boolean;
     name: string;
     password: string;
+    status: RoomStatusEnum;
     steps: Step[];
     participants: number;
+    showQuestion: boolean;
+    currentStep: number;
   }
 
   interface GetAllRoomsData {

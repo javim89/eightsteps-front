@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { Box, Backdrop, Typography } from "@mui/material";
+import {
+  Box, Backdrop, Typography,
+} from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { GET_ROOM_BY_ID } from "../querys/querys.tsx";
 import Step from "../components/Step/Step.tsx";
 import ROOM_SUBSCRIPTION from "../subscriptions/subscriptions.tsx";
+import QuestionDialogSection from "../sections/room/QuestionDialogSection.tsx";
 
 const Room = () => {
   const { id } = useParams();
   const [appbarHeight, setAppbarHeight] = useState<number | undefined>(0);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
+
   const {
     subscribeToMore, loading, error, data,
   } = useQuery(GET_ROOM_BY_ID, {
@@ -35,8 +41,18 @@ const Room = () => {
     return () => unsubscribe();
   }, [id, subscribeToMore]);
 
+  useEffect(() => {
+    setOpenDialog(data?.getRoomById.showQuestion || false);
+    setCurrentStep(data?.getRoomById.currentStep);
+  }, [data?.getRoomById]);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
+
+  const checkAnswer = (questionId: string, answer: boolean) => {
+    console.log({ questionId });
+    console.log({ answer });
+  };
 
   return (
     <Box>
@@ -51,6 +67,14 @@ const Room = () => {
         <CircularProgress color="inherit" />
         </Box>
       </Backdrop>
+      {(currentStep && openDialog) && (
+      <QuestionDialogSection
+        open={openDialog}
+        checkAnswer={(questionId, answer) => checkAnswer(questionId, answer)}
+        category={data?.getRoomById.steps[currentStep - 1].category.name || ""}
+        question={data?.getRoomById.steps[currentStep - 1].question}
+      />
+      )}
       <Box sx={[{
         display: "flex",
         flexDirection: "column",

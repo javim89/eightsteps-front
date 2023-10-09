@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  Box, Stack, Avatar, Typography,
+  Box, Stack, Avatar, Typography, Badge,
 } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 
@@ -39,9 +39,12 @@ const Step: React.FC<Step> = ({
       <Box>
         <Stack direction="row" spacing={2}>
           {participants.map((participant, index) => (
-            <Avatar key={index} sx={{ bgcolor: deepPurple[500], width: 24, height: 24 }}>
-              <Typography fontSize={14}>{getShortName(participant)}</Typography>
-            </Avatar>
+            // Cambiar badgecontent a "" y color success o error dependiendo el resultado de la respeusta
+            <Badge badgeContent={0} color="error">
+              <Avatar key={index} sx={{ bgcolor: deepPurple[500], width: 32, height: 32 }}>
+                <Typography fontSize={14}>{getShortName(participant.user)}</Typography>
+              </Avatar>
+            </Badge>
           ))}
         </Stack>
       </Box>

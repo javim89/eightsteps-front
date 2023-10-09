@@ -7,6 +7,9 @@ const ROOM_SUBSCRIPTION: TypedDocumentNode<GetRoomByIdData> = gql`
       isPrivate
       name
       participants
+      status
+      showQuestion
+      currentStep
       steps {
         category {
           mainColor
@@ -14,9 +17,17 @@ const ROOM_SUBSCRIPTION: TypedDocumentNode<GetRoomByIdData> = gql`
         }
         step
         participants {
-          name
-          surname
-          alias
+          user {
+            name
+            surname
+            alias
+          }
+          isAnswerOneCorrect
+        }
+        question {
+          id
+          question
+          helperText
         }
       }
     }
