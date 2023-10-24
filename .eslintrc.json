@@ -13,6 +13,7 @@
     "plugins": ["react"],
     "rules": {
         "@typescript-eslint/quotes": ["error", "double"],
+        "max-len": ["error", { "comments": 150, "code": 150 }],
         "import/extensions": [
             "error",
             "ignorePackages",

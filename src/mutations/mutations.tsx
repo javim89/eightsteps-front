@@ -16,7 +16,15 @@ const ADD_PARTICIPANT_TO_ROOM = gql`
   }
 `;
 
+const CREATE_USER = gql`
+  mutation CreateUser($alias: String) {
+    createUser(alias: $alias) {
+      token
+    }
+  }
+`;
 export {
   CREATE_ROOM,
   ADD_PARTICIPANT_TO_ROOM,
+  CREATE_USER,
 };

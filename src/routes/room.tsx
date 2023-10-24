@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import {
@@ -23,8 +23,6 @@ const Room = () => {
   });
 
   useEffect(() => {
-    setAppbarHeight(document?.getElementById("appBar")?.clientHeight);
-
     const unsubscribe = subscribeToMore({
       document: ROOM_SUBSCRIPTION, // Tu suscripción GraphQL
       variables: { id },
@@ -40,6 +38,10 @@ const Room = () => {
 
     return () => unsubscribe();
   }, [id, subscribeToMore]);
+
+  useLayoutEffect(() => {
+    setAppbarHeight(document?.getElementById("appBar")?.clientHeight);
+  }, []);
 
   useEffect(() => {
     setOpenDialog(data?.getRoomById.showQuestion || false);

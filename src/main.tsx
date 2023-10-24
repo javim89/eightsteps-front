@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {
-  RouterProvider,
+  BrowserRouter,
 } from "react-router-dom";
 import {
   InMemoryCache, HttpLink, ApolloProvider, ApolloClient, split,
@@ -9,10 +9,12 @@ import {
 import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
-import router from "./routes/router.tsx";
+import AppRoutes from "./routes/routes.tsx";
+import { AuthProvider } from "./contexts/auth.context.tsx";
 
 const httpLink = new HttpLink({
   uri: `https://${import.meta.env.VITE_EIGHT_STEPS_BACKEND_URL}`,
+  credentials: "include",
 });
 
 const wsLink = new GraphQLWsLink(createClient({
@@ -37,14 +39,18 @@ const splitLink = split(
 );
 
 const client = new ApolloClient({
-  link: splitLink,
   cache: new InMemoryCache(),
+  link: splitLink,
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-    <RouterProvider router={router} />
+      <AuthProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </AuthProvider>
     </ApolloProvider>
   </React.StrictMode>,
 );

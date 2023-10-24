@@ -12,8 +12,9 @@ declare global {
     FINISHED = "FINISHED",
   }
   interface User {
-    name: string;
-    surname: string;
+    id?: string;
+    name?: string;
+    surname?: string;
     alias?: string;
   }
 

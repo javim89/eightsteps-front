@@ -17,6 +17,7 @@ const Input: React.FC<InputI> = ({ name, ...rest }) => {
     variant="outlined"
     error={!!errorMesage}
     helperText={errorMesage?.toString()}
+    autoComplete="off"
     {...register(name)}
     {...rest} />
   );

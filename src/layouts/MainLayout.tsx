@@ -14,15 +14,15 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Adb as AdbIcon, Menu as MenuIcon } from "@mui/icons-material";
+import useAuth from "../hooks/useAuth.tsx";
 
 const pages = ["rooms", "users"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
+// const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const MainLayout = () => {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-
+  const { user, logOut } = useAuth();
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -38,6 +38,24 @@ const MainLayout = () => {
     setAnchorElUser(null);
   };
 
+  const settings = [
+    {
+      label: "Profile",
+      action: () => handleCloseUserMenu(),
+    },
+    {
+      label: "Account",
+      action: () => handleCloseUserMenu(),
+    },
+    {
+      label: "Dashboard",
+      action: () => handleCloseUserMenu(),
+    },
+    {
+      label: "Logout",
+      action: () => logOut(),
+    },
+  ];
   return (
     <React.Fragment>
       <AppBar position="static" id="appBar">
@@ -128,36 +146,37 @@ const MainLayout = () => {
                 </Button>
               ))}
             </Box>
-
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
+            {user && (
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt={user.alias} src="/static/images/avatar/2.jpg" />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting, index) => (
+                    <MenuItem key={index} onClick={setting.action}>
+                      <Typography textAlign="center">{setting.label}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            )}
           </Toolbar>
         </Container>
       </AppBar>

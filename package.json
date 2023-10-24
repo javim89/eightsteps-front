@@ -24,6 +24,7 @@
     "graphql": "^16.8.1",
     "graphql-ws": "^5.14.0",
     "happy-dom": "^12.9.1",
+    "jwt-decode": "^3.1.2",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "match-sorter": "^6.3.1",
