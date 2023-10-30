@@ -18,6 +18,13 @@ declare global {
     alias?: string;
   }
 
+  interface UserBot {
+    id?: string;
+    name?: string;
+    surname?: string;
+    alias?: string;
+  }
+
   interface Category {
     name: string;
     mainColor: string;
@@ -30,8 +37,8 @@ declare global {
   }
   interface ParticipantWithAnswer {
     user: User,
+    bot: UserBot,
     answerOne: Boolean,
-    isAnswerOneCorrect: Boolean,
     answerTwo: any
   }
   interface Step {

@@ -42,7 +42,7 @@ const Step: React.FC<Step> = ({
             // Cambiar badgecontent a "" y color success o error dependiendo el resultado de la respuesta
             <Badge badgeContent={0} color="error" key={index}>
               <Avatar key={index} sx={{ bgcolor: deepPurple[500], width: 32, height: 32 }}>
-                <Typography fontSize={14}>{getShortName(participant.user)}</Typography>
+                <Typography fontSize={14}>{participant.user ? getShortName(participant.user) : getShortName(participant.bot)}</Typography>
               </Avatar>
             </Badge>
           ))}

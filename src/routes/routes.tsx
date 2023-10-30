@@ -23,13 +23,11 @@ const AppRoutes = () => {
     <Routes>
       <Route element={<MainLayout />} errorElement={<ErrorPage />}>
         <Route index element={<Home />} />
-      </Route>
-      <Route element={<ProtectedRoute user={user} />}>
-        <Route element={<MainLayout />} errorElement={<ErrorPage />}>
-          <Route path="rooms" element={<Rooms />} />
-          <Route path="rooms/:id" element={<Room />} />
+          <Route element={<ProtectedRoute user={user} />}>
+            <Route path="rooms" element={<Rooms />} />
+            <Route path="rooms/:id" element={<Room />} />
+          </Route>
         </Route>
-      </Route>
       <Route path="*" element={<p>There's nothing here: 404!</p>} />
     </Routes>
   );
