@@ -1,5 +1,5 @@
 import {
-  createContext, useEffect, useReducer, useCallback,
+  createContext, useEffect, useReducer,
 } from "react";
 import jwt_decode from "jwt-decode";
 
@@ -43,19 +43,14 @@ const authReducer = (state: AuthI, action: ActionsAuthI) => {
 export function AuthProvider({ children }: { children: JSX.Element | JSX.Element[] }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  const saveUser = useCallback(
-    (token: string) => {
-      if (!state.token) {
-        localStorage.setItem("auth-token", token);
-      }
-      const user = jwt_decode(token);
-      dispatch({
-        type: ActionsAuthEnum.SAVE_USER,
-        payload: user,
-      });
-    },
-    [state.token],
-  );
+  const saveUser = (token: string) => {
+    const user = jwt_decode(token);
+    localStorage.setItem("auth-token", token);
+    dispatch({
+      type: ActionsAuthEnum.SAVE_USER,
+      payload: user,
+    });
+  };
 
   const logOut = () => {
     localStorage.removeItem("auth-token");
@@ -66,10 +61,19 @@ export function AuthProvider({ children }: { children: JSX.Element | JSX.Element
   };
 
   useEffect(() => {
-    if (state.token) {
-      saveUser(state.token);
+    const storedToken = localStorage.getItem("auth-token");
+    if (storedToken) {
+      try {
+        const user = jwt_decode(storedToken);
+        if (user) {
+          dispatch({ type: ActionsAuthEnum.SAVE_USER, payload: user });
+        }
+      } catch (error) {
+        console.error("Invalid or expired token:", error);
+        // localStorage.removeItem('auth-token');
+      }
     }
-  }, [state.token, saveUser]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ ...state, saveUser, logOut }}>

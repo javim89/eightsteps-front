@@ -8,8 +8,8 @@ import Home from "./home.tsx";
 import ErrorPage from "../error-page.tsx";
 import useAuth from "../hooks/useAuth.tsx";
 
-const ProtectedRoute = ({ user }: { user: User | null }) => {
-  if (!user) {
+const ProtectedRoute = ({ token }: { token: string | null }) => {
+  if (!token) {
     return <Navigate to={"/"} replace />;
   }
 
@@ -17,17 +17,17 @@ const ProtectedRoute = ({ user }: { user: User | null }) => {
 };
 
 const AppRoutes = () => {
-  const { user } = useAuth();
+  const { token } = useAuth();
 
   return (
     <Routes>
       <Route element={<MainLayout />} errorElement={<ErrorPage />}>
         <Route index element={<Home />} />
-          <Route element={<ProtectedRoute user={user} />}>
-            <Route path="rooms" element={<Rooms />} />
-            <Route path="rooms/:id" element={<Room />} />
-          </Route>
+        <Route element={<ProtectedRoute token={token} />}>
+          <Route path="rooms" element={<Rooms />} />
+          <Route path="rooms/:id" element={<Room />} />
         </Route>
+      </Route>
       <Route path="*" element={<p>There's nothing here: 404!</p>} />
     </Routes>
   );
