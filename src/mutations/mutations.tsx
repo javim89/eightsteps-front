@@ -23,8 +23,15 @@ const CREATE_USER = gql`
     }
   }
 `;
+
+const SAVE_AND_CHECK_ANSWER = gql`
+  mutation SaveAndCheckAnswer($answer: Boolean, $roomId: ID) {
+    saveAndCheckAnswer(answer: $answer, roomId: $roomId)
+  }
+`;
 export {
   CREATE_ROOM,
   ADD_PARTICIPANT_TO_ROOM,
   CREATE_USER,
+  SAVE_AND_CHECK_ANSWER,
 };

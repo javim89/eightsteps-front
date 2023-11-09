@@ -39,6 +39,7 @@ declare global {
     user: User,
     bot: UserBot,
     answerOne: Boolean,
+    isAnswerOneCorrect: Boolean,
     answerTwo: any
   }
   interface Step {

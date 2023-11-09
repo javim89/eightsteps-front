@@ -39,8 +39,11 @@ const Step: React.FC<Step> = ({
       <Box>
         <Stack direction="row" spacing={2}>
           {participants.map((participant, index) => (
-            // Cambiar badgecontent a "" y color success o error dependiendo el resultado de la respuesta
-            <Badge badgeContent={0} color="error" key={index}>
+            <Badge
+              badgeContent={participant.isAnswerOneCorrect !== null ? "" : 0}
+              color={participant.isAnswerOneCorrect ? "success" : "error"}
+              key={index}
+            >
               <Avatar key={index} sx={{ bgcolor: deepPurple[500], width: 32, height: 32 }}>
                 <Typography fontSize={14}>{participant.user ? getShortName(participant.user) : getShortName(participant.bot)}</Typography>
               </Avatar>

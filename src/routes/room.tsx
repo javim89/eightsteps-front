@@ -1,6 +1,6 @@
 import { useEffect, useState, useLayoutEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import {
   Box, Backdrop, Typography,
 } from "@mui/material";
@@ -9,13 +9,14 @@ import { GET_ROOM_BY_ID } from "../querys/querys.tsx";
 import Step from "../components/Step/Step.tsx";
 import ROOM_SUBSCRIPTION from "../subscriptions/subscriptions.tsx";
 import QuestionDialogSection from "../sections/room/QuestionDialogSection.tsx";
+import { SAVE_AND_CHECK_ANSWER } from "../mutations/mutations.tsx";
 
 const Room = () => {
   const { id } = useParams();
   const [appbarHeight, setAppbarHeight] = useState<number | undefined>(0);
   const [openDialog, setOpenDialog] = useState(false);
   const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
-
+  const [saveAndcheckAnswer, { loading: loadingSaveAndCheckAnswer }] = useMutation(SAVE_AND_CHECK_ANSWER);
   const {
     subscribeToMore, loading, error, data,
   } = useQuery(GET_ROOM_BY_ID, {
@@ -51,11 +52,6 @@ const Room = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
-  const checkAnswer = (questionId: string, answer: boolean) => {
-    console.log({ questionId });
-    console.log({ answer });
-  };
-
   return (
     <Box>
       <Backdrop
@@ -72,9 +68,18 @@ const Room = () => {
       {(currentStep && openDialog) && (
       <QuestionDialogSection
         open={openDialog}
-        checkAnswer={(questionId, answer) => checkAnswer(questionId, answer)}
+        saveAndcheckAnswer={async (answer) => {
+          await saveAndcheckAnswer({
+            variables: {
+              answer,
+              roomId: id,
+            },
+          });
+          setOpenDialog(!openDialog);
+        }}
         category={data?.getRoomById.steps[currentStep - 1].category.name || ""}
         question={data?.getRoomById.steps[currentStep - 1].question}
+        loading={loadingSaveAndCheckAnswer}
       />
       )}
       <Box sx={[{

@@ -37,6 +37,8 @@ const GET_ROOM_BY_ID: TypedDocumentNode<GetRoomByIdData> = gql`
             surname
             alias
           }
+          answerOne
+          isAnswerOneCorrect
         }
         question {
           id
