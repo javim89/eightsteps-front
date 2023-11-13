@@ -20,13 +20,13 @@ const Transition = forwardRef((
 
 const QuestionDialogSection = ({
   open,
-  saveAndcheckAnswer,
+  onClickAnswer,
   category,
   question,
   loading,
 }: {
   open: boolean,
-  saveAndcheckAnswer: (answer: boolean) => void,
+  onClickAnswer: (answer: boolean) => void,
   category: string,
   question: Question | undefined
   loading: boolean
@@ -72,8 +72,8 @@ const QuestionDialogSection = ({
               {seconds}:{miliseconds}
             </DialogContentText>
             <Stack gap={2} mt={2}>
-              <LoadingButton variant="contained" onClick={() => saveAndcheckAnswer(true)} loading={loading}>Verdadero</LoadingButton>
-              <LoadingButton variant="contained" onClick={() => saveAndcheckAnswer(false)} loading={loading}>Falso</LoadingButton>
+              <LoadingButton variant="contained" onClick={() => onClickAnswer(true)} loading={loading}>Verdadero</LoadingButton>
+              <LoadingButton variant="contained" onClick={() => onClickAnswer(false)} loading={loading}>Falso</LoadingButton>
             </Stack>
           </>
         )}

@@ -9,6 +9,7 @@ import {
 import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
+import { SnackbarProvider } from "notistack";
 import AppRoutes from "./routes/routes.tsx";
 import { AuthProvider } from "./contexts/auth.context.tsx";
 
@@ -46,11 +47,13 @@ const client = new ApolloClient({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <AuthProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </AuthProvider>
+      <SnackbarProvider maxSnack={3}>
+        <AuthProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </AuthProvider>
+      </SnackbarProvider>
     </ApolloProvider>
   </React.StrictMode>,
 );

@@ -5,6 +5,7 @@ import {
   Box, Backdrop, Typography,
 } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useSnackbar } from "notistack";
 import { GET_ROOM_BY_ID } from "../querys/querys.tsx";
 import Step from "../components/Step/Step.tsx";
 import ROOM_SUBSCRIPTION from "../subscriptions/subscriptions.tsx";
@@ -15,14 +16,16 @@ const Room = () => {
   const { id } = useParams();
   const [appbarHeight, setAppbarHeight] = useState<number | undefined>(0);
   const [openDialog, setOpenDialog] = useState(false);
-  const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
+  const [currentStep, setCurrentStep] = useState<number>(7);
   const [saveAndcheckAnswer, { loading: loadingSaveAndCheckAnswer }] = useMutation(SAVE_AND_CHECK_ANSWER);
+
   const {
     subscribeToMore, loading, error, data,
   } = useQuery(GET_ROOM_BY_ID, {
     variables: { id },
   });
 
+  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     const unsubscribe = subscribeToMore({
       document: ROOM_SUBSCRIPTION, // Tu suscripción GraphQL
@@ -40,13 +43,32 @@ const Room = () => {
     return () => unsubscribe();
   }, [id, subscribeToMore]);
 
+  const onClickAnswer = (answer: boolean) => {
+    saveAndcheckAnswer({
+      variables: {
+        answer,
+        roomId: id,
+      },
+    }).then((res) => {
+      enqueueSnackbar(data?.getRoomById.steps[currentStep - 1].question.helperText || "Agregar helper text", {
+        variant: res.data.saveAndCheckAnswer ? "success" : "error",
+        autoHideDuration: 2000,
+        anchorOrigin: {
+          horizontal: "center",
+          vertical: "top",
+        },
+      });
+      setOpenDialog(!openDialog);
+    });
+  };
+
   useLayoutEffect(() => {
     setAppbarHeight(document?.getElementById("appBar")?.clientHeight);
   }, []);
 
   useEffect(() => {
     setOpenDialog(data?.getRoomById.showQuestion || false);
-    setCurrentStep(data?.getRoomById.currentStep);
+    setCurrentStep(data?.getRoomById.currentStep || 7);
   }, [data?.getRoomById]);
 
   if (loading) return <p>Loading...</p>;
@@ -68,15 +90,7 @@ const Room = () => {
       {(currentStep && openDialog) && (
       <QuestionDialogSection
         open={openDialog}
-        saveAndcheckAnswer={async (answer) => {
-          await saveAndcheckAnswer({
-            variables: {
-              answer,
-              roomId: id,
-            },
-          });
-          setOpenDialog(!openDialog);
-        }}
+        onClickAnswer={(answer) => onClickAnswer(answer)}
         category={data?.getRoomById.steps[currentStep - 1].category.name || ""}
         question={data?.getRoomById.steps[currentStep - 1].question}
         loading={loadingSaveAndCheckAnswer}
