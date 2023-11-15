@@ -1,3 +1,5 @@
+import { RoomStatusEnum, UserStatusEnum } from "./constants/constants.tsx";
+
 export {};
 
 declare global {
@@ -6,11 +8,6 @@ declare global {
    * or augment existing declarations in the global namespace.
    */
 
-  enum RoomStatusEnum {
-    NEW = "NEW",
-    PLAYING = "PLAYING",
-    FINISHED = "FINISHED",
-  }
   interface User {
     id?: string;
     name?: string;
@@ -41,6 +38,8 @@ declare global {
     answerOne: Boolean,
     isAnswerOneCorrect: Boolean,
     answerTwo: any
+    status: UserStatusEnum
+    showQuestion: boolean
   }
   interface Step {
     participants: ParticipantWithAnswer[];
@@ -57,7 +56,6 @@ declare global {
     status: RoomStatusEnum;
     steps: Step[];
     participants: number;
-    showQuestion: boolean;
     currentStep: number;
   }
 

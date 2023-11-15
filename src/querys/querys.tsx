@@ -18,7 +18,6 @@ const GET_ROOM_BY_ID: TypedDocumentNode<GetRoomByIdData> = gql`
       name
       participants
       status
-      showQuestion
       currentStep
       steps {
         category {
@@ -39,6 +38,8 @@ const GET_ROOM_BY_ID: TypedDocumentNode<GetRoomByIdData> = gql`
           }
           answerOne
           isAnswerOneCorrect
+          status
+          showQuestion
         }
         question {
           id

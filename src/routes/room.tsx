@@ -1,23 +1,13 @@
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
-import {
-  Box, Backdrop, Typography,
-} from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
-import { useSnackbar } from "notistack";
+import { useQuery } from "@apollo/client";
 import { GET_ROOM_BY_ID } from "../querys/querys.tsx";
-import Step from "../components/Step/Step.tsx";
 import ROOM_SUBSCRIPTION from "../subscriptions/subscriptions.tsx";
-import QuestionDialogSection from "../sections/room/QuestionDialogSection.tsx";
-import { SAVE_AND_CHECK_ANSWER } from "../mutations/mutations.tsx";
+import RoomProvider from "../contexts/room.context.tsx";
+import RoomSection from "../sections/room/Room.section.tsx";
 
 const Room = () => {
   const { id } = useParams();
-  const [appbarHeight, setAppbarHeight] = useState<number | undefined>(0);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [currentStep, setCurrentStep] = useState<number>(7);
-  const [saveAndcheckAnswer, { loading: loadingSaveAndCheckAnswer }] = useMutation(SAVE_AND_CHECK_ANSWER);
 
   const {
     subscribeToMore, loading, error, data,
@@ -25,7 +15,6 @@ const Room = () => {
     variables: { id },
   });
 
-  const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     const unsubscribe = subscribeToMore({
       document: ROOM_SUBSCRIPTION, // Tu suscripción GraphQL
@@ -43,73 +32,13 @@ const Room = () => {
     return () => unsubscribe();
   }, [id, subscribeToMore]);
 
-  const onClickAnswer = (answer: boolean) => {
-    saveAndcheckAnswer({
-      variables: {
-        answer,
-        roomId: id,
-      },
-    }).then((res) => {
-      enqueueSnackbar(data?.getRoomById.steps[currentStep - 1].question.helperText || "Agregar helper text", {
-        variant: res.data.saveAndCheckAnswer ? "success" : "error",
-        autoHideDuration: 2000,
-        anchorOrigin: {
-          horizontal: "center",
-          vertical: "top",
-        },
-      });
-      setOpenDialog(!openDialog);
-    });
-  };
-
-  useLayoutEffect(() => {
-    setAppbarHeight(document?.getElementById("appBar")?.clientHeight);
-  }, []);
-
-  useEffect(() => {
-    setOpenDialog(data?.getRoomById.showQuestion || false);
-    setCurrentStep(data?.getRoomById.currentStep || 7);
-  }, [data?.getRoomById]);
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
   return (
-    <Box>
-      <Backdrop
-        sx={{ color: "#ffffff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={data ? data.getRoomById.participants < 8 : true}
-      >
-        <Box sx={{
-          textAlign: "center",
-        }}>
-        <Typography paddingBottom={5} fontSize={32}>Esperando participantes</Typography>
-        <CircularProgress color="inherit" />
-        </Box>
-      </Backdrop>
-      {(currentStep && openDialog) && (
-      <QuestionDialogSection
-        open={openDialog}
-        onClickAnswer={(answer) => onClickAnswer(answer)}
-        category={data?.getRoomById.steps[currentStep - 1].category.name || ""}
-        question={data?.getRoomById.steps[currentStep - 1].question}
-        loading={loadingSaveAndCheckAnswer}
-      />
-      )}
-      <Box sx={[{
-        display: "flex",
-        flexDirection: "column",
-        height: `calc(100dvh - ${appbarHeight}px)`,
-      },
-      ]}>
-        {data?.getRoomById.steps.map((step: Step, index) => (
-          <Step
-            key={index}
-            {...step}
-          />
-        ))}
-      </Box>
-    </Box>
+    <RoomProvider room={data?.getRoomById}>
+      <RoomSection />
+    </RoomProvider>
   );
 };
 

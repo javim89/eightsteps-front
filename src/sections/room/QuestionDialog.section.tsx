@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import LoadingButton from "@mui/lab/LoadingButton";
+import useRoom from "../../hooks/useRoom.tsx";
+import { UserStatusEnum } from "../../constants/constants.tsx";
 
 const Transition = forwardRef((
   props: TransitionProps & {
@@ -19,21 +21,17 @@ const Transition = forwardRef((
 ) => <Slide direction="up" ref={ref} {...props} />);
 
 const QuestionDialogSection = ({
-  open,
   onClickAnswer,
-  category,
-  question,
   loading,
 }: {
-  open: boolean,
   onClickAnswer: (answer: boolean) => void,
-  category: string,
-  question: Question | undefined
   loading: boolean
 }) => {
   const [progress, setProgress] = useState(0);
   const [seconds, setSeconds] = useState(10);
   const [miliseconds, setMiliseconds] = useState(0);
+
+  const { room, status } = useRoom();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -49,26 +47,26 @@ const QuestionDialogSection = ({
     }, 10);
 
     if (progress === 10000) {
-      // elegir una respuesta.
+      onClickAnswer(false);
+      setProgress(0);
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [seconds, miliseconds, progress]);
+  }, [seconds, miliseconds, progress, onClickAnswer]);
 
   return (
-    <Dialog open={open} TransitionComponent={Transition} keepMounted={false}>
+    <Dialog open={status.user === UserStatusEnum.ANSWERING} TransitionComponent={Transition} keepMounted={false}>
       <LinearProgress variant="determinate" value={(progress * 100) / 10000} color="secondary" />
       <DialogTitle
         sx={{
           textAlign: "center",
         }}>
-        {category}
+        {room?.steps[room.currentStep].category.name || ""}
       </DialogTitle>
       <DialogContent>
-        {question && (
           <>
             <DialogContentText>
-              {question.question}
+              {room?.steps[room.currentStep].question.question}
               {seconds}:{miliseconds}
             </DialogContentText>
             <Stack gap={2} mt={2}>
@@ -76,7 +74,6 @@ const QuestionDialogSection = ({
               <LoadingButton variant="contained" onClick={() => onClickAnswer(false)} loading={loading}>Falso</LoadingButton>
             </Stack>
           </>
-        )}
       </DialogContent>
     </Dialog>
   );
