@@ -8,7 +8,7 @@ const BackDropSection = () => {
   return (
     <Backdrop
       sx={{ color: "#ffffff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      open={status.user === UserStatusEnum.WAITING || status.room === RoomStatusEnum.WAITING_USERS}
+      open={[UserStatusEnum.WAITING, UserStatusEnum.WINNER].includes(status.user) || status.room === RoomStatusEnum.WAITING_USERS}
     >
       <Box sx={{
         textAlign: "center",

@@ -7,4 +7,5 @@ export enum RoomStatusEnum {
 export enum UserStatusEnum {
   WAITING = "WAITING",
   ANSWERING = "ANSWERING",
+  WINNER = "WINNER",
 }

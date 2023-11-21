@@ -3,6 +3,7 @@ import {
   Box, Stack, Avatar, Typography, Badge,
 } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
+import { UserStatusEnum } from "../../constants/constants.tsx";
 
 const getShortName = (participant: User): String => {
   let shortName = (participant.alias && participant.alias[0]) || "";
@@ -38,7 +39,7 @@ const Step: React.FC<Step> = ({
       </Box>
       <Box>
         <Stack direction="row" spacing={2}>
-          {participants.map((participant, index) => (
+          {participants.filter((participant) => participant.status !== UserStatusEnum.WINNER).map((participant, index) => (
             <Badge
               badgeContent={participant.isAnswerOneCorrect !== null ? "" : 0}
               color={participant.isAnswerOneCorrect ? "success" : "error"}
