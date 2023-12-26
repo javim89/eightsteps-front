@@ -9,3 +9,8 @@ export enum UserStatusEnum {
   ANSWERING = "ANSWERING",
   WINNER = "WINNER",
 }
+
+export enum QuestionsTypeEnum {
+  BOOLEAN = "BOOLEAN",
+  NUMERIC = "NUMERIC",
+}

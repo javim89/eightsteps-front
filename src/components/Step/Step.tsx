@@ -38,16 +38,28 @@ const Step: React.FC<Step> = ({
         </Typography>
       </Box>
       <Box>
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={3}>
           {participants.filter((participant) => participant.status !== UserStatusEnum.WINNER).map((participant, index) => (
             <Badge
-              badgeContent={participant.isAnswerOneCorrect !== null ? "" : 0}
-              color={participant.isAnswerOneCorrect ? "success" : "error"}
+              badgeContent={participant.answers !== undefined && participant.answers.filter((a) => a.isAnswerCorrect).length}
+              color={"success"}
               key={index}
+              anchorOrigin={{
+                vertical: "top", horizontal: "right",
+              }}
             >
-              <Avatar key={index} sx={{ bgcolor: deepPurple[500], width: 32, height: 32 }}>
-                <Typography fontSize={14}>{participant.user ? getShortName(participant.user) : getShortName(participant.bot)}</Typography>
-              </Avatar>
+              <Badge
+                badgeContent={participant.answers !== undefined && participant.answers.filter((a) => !a.isAnswerCorrect).length}
+                color={"error"}
+                key={index}
+                anchorOrigin={{
+                  vertical: "top", horizontal: "left",
+                }}
+              >
+                <Avatar key={index} sx={{ bgcolor: deepPurple[500], width: 32, height: 32 }}>
+                  <Typography fontSize={14}>{participant.user ? getShortName(participant.user) : getShortName(participant.bot)}</Typography>
+                </Avatar>
+              </Badge>
             </Badge>
           ))}
         </Stack>

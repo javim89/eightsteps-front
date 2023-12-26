@@ -1,4 +1,4 @@
-import { RoomStatusEnum, UserStatusEnum } from "./constants/constants.tsx";
+import { RoomStatusEnum, UserStatusEnum, QuestionsTypeEnum } from "./constants/constants.tsx";
 
 export {};
 
@@ -30,14 +30,18 @@ declare global {
   interface Question {
     id: string,
     question: string,
-    helperText: string
+    helperText: string,
+    type: QuestionsTypeEnum
+  }
+
+  interface Answer {
+    answer: any,
+    isAnswerCorrect: boolean,
   }
   interface ParticipantWithAnswer {
     user: User,
     bot: UserBot,
-    answerOne: Boolean,
-    isAnswerOneCorrect: Boolean,
-    answerTwo: any
+    answers: Answer[]
     status: UserStatusEnum
     showQuestion: boolean
   }
@@ -45,7 +49,8 @@ declare global {
     participants: ParticipantWithAnswer[];
     step: number;
     category: Category;
-    question: Question;
+    askQuestion: number;
+    questions: Question[];
   }
 
   interface Room {

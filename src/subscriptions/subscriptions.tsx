@@ -26,15 +26,19 @@ const ROOM_SUBSCRIPTION: TypedDocumentNode<GetRoomByIdData> = gql`
             surname
             alias
           }
-          answerOne
-          isAnswerOneCorrect
+          answers {
+            answer
+            isAnswerCorrect
+          } 
           status
           showQuestion
         }
-        question {
-          id
+        askQuestion
+        questions {
           question
+          type
           helperText
+          id
         }
       }
     }

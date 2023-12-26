@@ -25,7 +25,7 @@ const CREATE_USER = gql`
 `;
 
 const SAVE_AND_CHECK_ANSWER = gql`
-  mutation SaveAndCheckAnswer($answer: Boolean, $roomId: ID) {
+  mutation SaveAndCheckAnswer($answer: Any, $roomId: ID) {
     saveAndCheckAnswer(answer: $answer, roomId: $roomId)
   }
 `;

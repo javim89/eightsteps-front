@@ -5,13 +5,12 @@ import {
   DialogContent,
   DialogContentText,
   Slide,
-  Stack,
   LinearProgress,
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
-import LoadingButton from "@mui/lab/LoadingButton";
 import useRoom from "../../hooks/useRoom.tsx";
 import { UserStatusEnum } from "../../constants/constants.tsx";
+import AnswerType from "../../components/AnswerType.tsx";
 
 const Transition = forwardRef((
   props: TransitionProps & {
@@ -20,18 +19,12 @@ const Transition = forwardRef((
   ref: React.Ref<unknown>,
 ) => <Slide direction="up" ref={ref} {...props} />);
 
-const QuestionDialogSection = ({
-  onClickAnswer,
-  loading,
-}: {
-  onClickAnswer: (answer: boolean) => void,
-  loading: boolean
-}) => {
+const QuestionDialogSection = () => {
   const [progress, setProgress] = useState(0);
   const [seconds, setSeconds] = useState(10);
   const [miliseconds, setMiliseconds] = useState(0);
 
-  const { room, status } = useRoom();
+  const { room, status, onClickAnswer } = useRoom();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -66,13 +59,12 @@ const QuestionDialogSection = ({
       <DialogContent>
           <>
             <DialogContentText>
-              {room?.steps[room.currentStep].question.question}
+              {room?.steps[room.currentStep].questions[room.steps[room.currentStep].askQuestion].question}
               {seconds}:{miliseconds}
             </DialogContentText>
-            <Stack gap={2} mt={2}>
-              <LoadingButton variant="contained" onClick={() => onClickAnswer(true)} loading={loading}>Verdadero</LoadingButton>
-              <LoadingButton variant="contained" onClick={() => onClickAnswer(false)} loading={loading}>Falso</LoadingButton>
-            </Stack>
+            <AnswerType
+              type={room?.steps[room.currentStep].questions[room.steps[room.currentStep].askQuestion].type}
+            />
           </>
       </DialogContent>
     </Dialog>
