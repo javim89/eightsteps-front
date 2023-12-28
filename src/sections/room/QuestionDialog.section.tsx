@@ -1,4 +1,4 @@
-import { forwardRef, useState, useEffect } from "react";
+import { forwardRef } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -20,33 +20,17 @@ const Transition = forwardRef((
 ) => <Slide direction="up" ref={ref} {...props} />);
 
 const QuestionDialogSection = () => {
-  const [progress, setProgress] = useState(0);
-  const [seconds, setSeconds] = useState(10);
-  const [miliseconds, setMiliseconds] = useState(0);
+  const {
+    room, status, timer,
+    // onClickAnswer,
+  } = useRoom();
 
-  const { room, status, onClickAnswer } = useRoom();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress(progress + 10);
-      if (seconds === 0 && miliseconds === 0) {
-        clearInterval(interval);
-      } else if (miliseconds === 0) {
-        setSeconds(seconds - 1);
-        setMiliseconds(99);
-      } else {
-        setMiliseconds(miliseconds - 1);
-      }
-    }, 10);
-
-    if (progress === 10000) {
-      onClickAnswer(false);
-      setProgress(0);
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [seconds, miliseconds, progress, onClickAnswer]);
-
+  const { miliseconds, seconds, progress } = timer;
+  // useEffect(() => {
+  //   if (progress === 10000) {
+  //     onClickAnswer(false);
+  //   }
+  // }, [progress, onClickAnswer]);
   return (
     <Dialog open={status.user === UserStatusEnum.ANSWERING} TransitionComponent={Transition} keepMounted={false}>
       <LinearProgress variant="determinate" value={(progress * 100) / 10000} color="secondary" />
@@ -57,15 +41,15 @@ const QuestionDialogSection = () => {
         {room?.steps[room.currentStep].category.name || ""}
       </DialogTitle>
       <DialogContent>
-          <>
-            <DialogContentText>
-              {room?.steps[room.currentStep].questions[room.steps[room.currentStep].askQuestion].question}
-              {seconds}:{miliseconds}
-            </DialogContentText>
-            <AnswerType
-              type={room?.steps[room.currentStep].questions[room.steps[room.currentStep].askQuestion].type}
-            />
-          </>
+        <>
+          <DialogContentText>
+            {room?.steps[room.currentStep].questions[room.steps[room.currentStep].askQuestion].question}
+            {seconds}:{miliseconds}
+          </DialogContentText>
+          <AnswerType
+            type={room?.steps[room.currentStep].questions[room.steps[room.currentStep].askQuestion].type}
+          />
+        </>
       </DialogContent>
     </Dialog>
   );

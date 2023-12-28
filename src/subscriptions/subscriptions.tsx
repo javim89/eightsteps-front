@@ -44,4 +44,13 @@ const ROOM_SUBSCRIPTION: TypedDocumentNode<GetRoomByIdData> = gql`
     }
 }`;
 
-export default ROOM_SUBSCRIPTION;
+const ROOM_TIMER_SUBSCRIPTION: TypedDocumentNode<RoomTimer> = gql`
+  subscription RoomTimerSubscription($roomTimerSubscriptionId: ID) {
+    roomTimerSubscription(id: $roomTimerSubscriptionId) {
+      miliseconds
+      seconds
+      progress
+    }
+}`;
+
+export { ROOM_SUBSCRIPTION, ROOM_TIMER_SUBSCRIPTION };

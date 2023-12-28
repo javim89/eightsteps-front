@@ -73,6 +73,16 @@ declare global {
     roomSubscription?: Room
   }
 
+  interface Timer {
+    miliseconds: number;
+    seconds: number;
+    progress: number;
+  }
+
+  interface RoomTimer {
+    roomTimerSubscription: Timer;
+  }
+
   interface RoomsStateI {
     openDialog: boolean;
     title?: string;

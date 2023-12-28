@@ -15,6 +15,7 @@ interface RoomContextI {
   room: Room | undefined;
   onClickAnswer: (answer: boolean | number) => void;
   loading: boolean;
+  timer: Timer
 }
 
 export const RoomContext = createContext<RoomContextI>({
@@ -26,9 +27,14 @@ export const RoomContext = createContext<RoomContextI>({
   room: undefined,
   onClickAnswer: () => {},
   loading: false,
+  timer: {
+    seconds: 0,
+    miliseconds: 0,
+    progress: 0,
+  },
 });
 
-const RoomProvider = ({ room, children }: { room: Room | undefined; children: JSX.Element | JSX.Element[] }) => {
+const RoomProvider = ({ room, timer, children }: { room: Room | undefined; timer: Timer, children: JSX.Element | JSX.Element[] }) => {
   const { user } = useAuth();
   const [saveAndcheckAnswer, { loading }] = useMutation(SAVE_AND_CHECK_ANSWER);
   const { enqueueSnackbar } = useSnackbar();
@@ -69,6 +75,7 @@ const RoomProvider = ({ room, children }: { room: Room | undefined; children: JS
       room,
       onClickAnswer,
       loading,
+      timer,
     }}>
       {children}
     </RoomContext.Provider>
